@@ -82,7 +82,7 @@
             // uitlenenToolStripMenuItem
             // 
             this.uitlenenToolStripMenuItem.Name = "uitlenenToolStripMenuItem";
-            this.uitlenenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.uitlenenToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.uitlenenToolStripMenuItem.Text = "Uitlenen kassa";
             this.uitlenenToolStripMenuItem.Click += new System.EventHandler(this.uitlenenToolStripMenuItem_Click);
             // 
@@ -98,6 +98,7 @@
             this.Text = "Videotheek";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.MainMDIForm_Load);
+            this.Resize += new System.EventHandler(this.MainMDIForm_Resize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);

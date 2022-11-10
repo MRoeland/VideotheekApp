@@ -1,6 +1,6 @@
 ﻿namespace VideotheekApp
 {
-    partial class KassaContainerForm
+    partial class SearchLedenForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,14 +30,16 @@
         {
             this.SuspendLayout();
             // 
-            // KassaContainerForm
+            // SearchLedenForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Name = "KassaContainerForm";
-            this.Text = "KassaContainerForm";
-            this.Load += new System.EventHandler(this.KassaContainerForm_Load);
+            this.BackColor = System.Drawing.Color.SlateBlue;
+            this.ClientSize = new System.Drawing.Size(432, 627);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Name = "SearchLedenForm";
+            this.Text = "SearchLedenForm";
+            this.Load += new System.EventHandler(this.SearchLedenForm_Load);
             this.ResumeLayout(false);
 
         }

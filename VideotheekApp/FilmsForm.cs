@@ -336,5 +336,10 @@ namespace VideotheekApp
 
             tbFilmId.Text = newFilmId.ToString();
         }
+
+        private void FilmsForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            //SingletonInstance = null;
+        }
     }
 }
