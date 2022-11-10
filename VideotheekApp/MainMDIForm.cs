@@ -21,6 +21,10 @@ namespace VideotheekApp
             CurrentOpenForm = null;
             InitializeComponent();
         }
+        private void MainMDIForm_Load(object sender, EventArgs e)
+        {
+
+        }
 
         private void filmsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -30,6 +34,10 @@ namespace VideotheekApp
         private void ledenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SwitchActiveForm(LedenForm.getInstance()); 
+        }
+        private void uitlenenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SwitchActiveForm(KassaContainerForm.getInstance());
         }
 
         public void SwitchActiveForm(Form newForm)
@@ -52,5 +60,8 @@ namespace VideotheekApp
 
             CurrentOpenForm = newForm;
         }
+
+
+        
     }
 }

@@ -16,6 +16,37 @@ namespace VideotheekApp
         public float Prijs { get; set; }
         public String Review { get; set; }
         public bool AdultRating { get; set; }
+        public String Poster { get; set; }
+        public string Rated { get; set; }
+        public string Runtime { get; set; }
+        public string Plot { get; set; }
 
+
+        public Film()
+        {
+
+        }
+
+        public Film(FilmApiSearchResult f)
+        {
+            Title = f.Title;
+            Regiseur = f.Director;
+            Genre = f.Genre;
+            Acteurs = f.Actors;
+            Prijs = 5;
+            Review = "";
+            if(f.Rated == "pg-18")
+            {
+                AdultRating = true;
+            }
+            else
+            {
+                AdultRating = false;
+            }
+            Poster = f.Poster;
+            Rated = f.Rated;
+            Runtime = f.Runtime;
+            Plot = f.Plot;
+        }
     }
 }

@@ -53,6 +53,10 @@ namespace VideotheekApp
             int prijsIndex = reader.GetOrdinal("Prijs");
             int reviewIndex = reader.GetOrdinal("Review");
             int ARIndex = reader.GetOrdinal("AdultRating");
+            int posterIndex = reader.GetOrdinal("Poster");
+            int ratedIndex = reader.GetOrdinal("Rated");
+            int runtimeIndex = reader.GetOrdinal("Runtime");
+            int plotIndex = reader.GetOrdinal("Plot");
 
             while (reader.Read())
             {
@@ -65,6 +69,22 @@ namespace VideotheekApp
                 f.Prijs = (float)reader.GetDouble(prijsIndex);
                 f.Review = reader.GetString(reviewIndex);
                 f.AdultRating = reader.GetBoolean(ARIndex);
+                if (!reader.IsDBNull(posterIndex))
+                {
+                    f.Poster = reader.GetString(posterIndex);
+                }
+                if (!reader.IsDBNull(ratedIndex))
+                {
+                    f.Rated = reader.GetString(ratedIndex);
+                }
+                if (!reader.IsDBNull(runtimeIndex))
+                {
+                    f.Runtime = reader.GetString(runtimeIndex);
+                }
+                if (!reader.IsDBNull(plotIndex))
+                {
+                    f.Plot = reader.GetString(plotIndex);
+                }
 
                 Films.Add(f);
             }
@@ -85,7 +105,7 @@ namespace VideotheekApp
 
                 SqlTransaction updateTransactie = connection.BeginTransaction();
 
-                SqlCommand filmCommand = new SqlCommand("UPDATE Films SET Title=@Title, Regiseur=@Reg,Acteurs=@Act,Genre=@Genre,Prijs=@Prijs,Review=@Review,AdultRating=@Ar WHERE Id=@FilmId", connection);
+                SqlCommand filmCommand = new SqlCommand("UPDATE Films SET Title=@Title, Regiseur=@Reg,Acteurs=@Act,Genre=@Genre,Prijs=@Prijs,Review=@Review,AdultRating=@Ar,Poster=@Poster,Rated=@Rated,Runtime=@Runtime,Plot=@Plot WHERE Id=@FilmId", connection);
                 filmCommand.Parameters.Add("@Title", System.Data.SqlDbType.NVarChar);
                 filmCommand.Parameters["@Title"].Value = f.Title;
                 filmCommand.Parameters.Add("@Reg", System.Data.SqlDbType.NVarChar);
@@ -102,6 +122,14 @@ namespace VideotheekApp
                 filmCommand.Parameters["@Ar"].Value = f.AdultRating;
                 filmCommand.Parameters.Add("@FilmId", System.Data.SqlDbType.Int);
                 filmCommand.Parameters["@FilmId"].Value = f.Id;
+                filmCommand.Parameters.Add("@Poster", System.Data.SqlDbType.NVarChar);
+                filmCommand.Parameters["@Poster"].Value = (f.Poster == null) ? "" : f.Poster;
+                filmCommand.Parameters.Add("@Rated", System.Data.SqlDbType.NVarChar);
+                filmCommand.Parameters["@Rated"].Value = (f.Rated == null) ? "" : f.Rated;
+                filmCommand.Parameters.Add("@Runtime", System.Data.SqlDbType.NVarChar);
+                filmCommand.Parameters["@Runtime"].Value = (f.Runtime == null) ? "" : f.Runtime;
+                filmCommand.Parameters.Add("@Plot", System.Data.SqlDbType.NVarChar);
+                filmCommand.Parameters["@Plot"].Value = (f.Plot == null) ? "" : f.Plot;
 
                 filmCommand.Transaction = updateTransactie;
 
@@ -148,7 +176,7 @@ namespace VideotheekApp
 
                 SqlTransaction updateTransactie = connection.BeginTransaction();
 
-                SqlCommand filmCommand = new SqlCommand("INSERT INTO Films(Id,Title,Regiseur,Acteurs,Genre,Prijs,Review,AdultRating) VALUES(@Id,@Title,@Reg,@Act,@Genre,@Prijs,@Review,@Ar)", connection);
+                SqlCommand filmCommand = new SqlCommand("INSERT INTO Films(Id,Title,Regiseur,Acteurs,Genre,Prijs,Review,AdultRating,Poster,Rated,Runtime,Plot) VALUES(@Id,@Title,@Reg,@Act,@Genre,@Prijs,@Review,@Ar,@Poster,@Rated,@Runtime,@Plot)", connection);
                 filmCommand.Parameters.Add("@Id", System.Data.SqlDbType.Int);
                 filmCommand.Parameters["@Id"].Value = f.Id;
                 filmCommand.Parameters.Add("@Title", System.Data.SqlDbType.NVarChar);
@@ -167,12 +195,53 @@ namespace VideotheekApp
                 filmCommand.Parameters["@Ar"].Value = f.AdultRating;
                 filmCommand.Parameters.Add("@FilmId", System.Data.SqlDbType.Int);
                 filmCommand.Parameters["@FilmId"].Value = f.Id;
+                filmCommand.Parameters.Add("@Poster", System.Data.SqlDbType.NVarChar);
+                filmCommand.Parameters["@Poster"].Value = (f.Poster == null)? "" : f.Poster;
+                filmCommand.Parameters.Add("@Rated", System.Data.SqlDbType.NVarChar);
+                filmCommand.Parameters["@Rated"].Value = (f.Rated == null) ? "" : f.Rated;
+                filmCommand.Parameters.Add("@Runtime", System.Data.SqlDbType.NVarChar);
+                filmCommand.Parameters["@Runtime"].Value = (f.Runtime == null) ? "" : f.Runtime;
+                filmCommand.Parameters.Add("@Plot", System.Data.SqlDbType.NVarChar);
+                filmCommand.Parameters["@Plot"].Value = (f.Plot == null) ? "" : f.Plot;
 
                 filmCommand.Transaction = updateTransactie;
 
                 int affected = filmCommand.ExecuteNonQuery();
 
                 updateTransactie.Commit();
+            }
+            catch (SqlException e)
+            {
+                returnMessage = e.Message;
+            }
+
+            connection.Close();
+
+            return returnMessage;
+        }
+
+        public String DeleteFilmFromDatabase(Film f)
+        {
+            String returnMessage = "";
+            SqlConnection connection = new SqlConnection(connectionString);
+
+            try
+            {
+                connection.Open();
+
+                SqlTransaction updateTransactie = connection.BeginTransaction();
+
+                SqlCommand filmCommand = new SqlCommand("DELETE FROM Films WHERE Id=@FilmId", connection);
+                filmCommand.Parameters.Add("@FilmId", System.Data.SqlDbType.Int);
+                filmCommand.Parameters["@FilmId"].Value = f.Id;
+
+                filmCommand.Transaction = updateTransactie;
+
+                int affected = filmCommand.ExecuteNonQuery();
+
+                updateTransactie.Commit();
+
+                Films.Remove(f);
             }
             catch (SqlException e)
             {

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -91,6 +92,19 @@ namespace VideotheekApp
             tbPrijs.Text = f.Prijs.ToString();
             cbAdults.Checked = f.AdultRating;
             tbReview.Text = f.Review;
+            if(f.Poster != "" && f.Poster != null)
+            {
+                pbFilmPoster.Load(f.Poster);
+            }
+            else
+            {
+                Assembly myAssembly = Assembly.GetExecutingAssembly();
+                Stream myStream = myAssembly.GetManifestResourceStream("VideotheekApp.images.NoMovieAvailable.png");
+                Bitmap bmp = new Bitmap(myStream);
+
+                pbFilmPoster.Image = bmp;
+
+            }
         }
 
         private void MakeTextBoxesReadOnly(Control.ControlCollection c, bool readOnly)
@@ -148,6 +162,7 @@ namespace VideotheekApp
                 selectedFilm.Prijs = float.Parse(tbPrijs.Text);
                 selectedFilm.Review = tbReview.Text;
                 selectedFilm.AdultRating = cbAdults.Checked;
+                selectedFilm.Poster = pbFilmPoster.ImageLocation;
 
                 ListViewItem mijnFilmItem = ZoekListViewItemVoorFilm(selectedFilm);
                 mijnFilmItem.SubItems.Clear();
@@ -155,7 +170,9 @@ namespace VideotheekApp
                 mijnFilmItem.SubItems.Add(selectedFilm.Regiseur);
                 mijnFilmItem.SubItems.Add(selectedFilm.Genre);
 
-                Repository.GetInstance().SlaFilmOpInDatabase(selectedFilm);
+                String errorMessage = Repository.GetInstance().SlaFilmOpInDatabase(selectedFilm);
+
+                ShowErrorMessage(errorMessage);
             }
             else if(mOperatie == Operatie.Creating)
             {
@@ -168,6 +185,7 @@ namespace VideotheekApp
                 newFilm.Prijs = float.Parse(tbPrijs.Text);
                 newFilm.Review = tbReview.Text;
                 newFilm.AdultRating = cbAdults.Checked;
+                newFilm.Poster = pbFilmPoster.ImageLocation;
 
                 ListViewItem mijnFilmItem = new ListViewItem();
                 mijnFilmItem.Text = newFilm.Title;
@@ -180,7 +198,9 @@ namespace VideotheekApp
                 filmListView.Select();
 
                 Repository.GetInstance().Films.Add(newFilm);
-                Repository.GetInstance().InsertNieuweFilmInDatabase(newFilm);
+                String errorMessage = Repository.GetInstance().InsertNieuweFilmInDatabase(newFilm);
+
+                ShowErrorMessage(errorMessage);
             }
 
             mOperatie = Operatie.Viewing;
@@ -198,6 +218,8 @@ namespace VideotheekApp
                 btnNewMovie.Visible = true;
                 btnCancel.Visible = false;
                 btnUpdate.Visible = false;
+                btnDelete.Visible = true;
+                btnAddMovieOnline.Visible = true;
             }
             else if(mOperatie == Operatie.Editing)
             {
@@ -207,6 +229,8 @@ namespace VideotheekApp
                 btnNewMovie.Visible = false;
                 btnUpdate.Visible = true;
                 btnCancel.Visible = true;
+                btnDelete.Visible = false;
+                btnAddMovieOnline.Visible = false;
             }
             else if(mOperatie == Operatie.Creating)
             {
@@ -216,6 +240,8 @@ namespace VideotheekApp
                 btnEditMovie.Visible = false;
                 btnUpdate.Visible = true;
                 btnCancel.Visible = true;
+                btnDelete.Visible = false;
+                btnAddMovieOnline.Visible = false;
             }
         }
 
@@ -249,11 +275,66 @@ namespace VideotheekApp
             cbAdults.Checked = false;
         }
 
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Ben je zeker dat je deze film wilt verwijderen?","Verwijder film", MessageBoxButtons.YesNo);
+
+            if(result == DialogResult.Yes)
+            {
+                String errorMessage = Repository.GetInstance().DeleteFilmFromDatabase(selectedFilm);
+                ListViewItem deleteItem = ZoekListViewItemVoorFilm(selectedFilm);
+                filmListView.Items.Remove(deleteItem);
+
+                tbFilmId.Clear();
+                tbFilmTitle.Clear();
+                tbFilmRegiseur.Clear();
+                tbFilmActeurs.Clear();
+                tbGenre.Clear();
+                tbPrijs.Clear();
+                tbReview.Clear();
+                cbAdults.Checked = false;
+
+                ShowErrorMessage(errorMessage);
+            }
+        }
+
         public enum Operatie
         {
             Viewing,
             Editing,
             Creating
+        }
+
+        public void ShowErrorMessage(String error)
+        {
+            if(error == "")
+            {
+                lblErrorMessage.Text = "Ready";
+                lblErrorMessage.ForeColor = Color.Black;
+            }
+            else
+            {
+                lblErrorMessage.Text = error;
+                lblErrorMessage.ForeColor = Color.Red;
+            }
+        }
+
+        private void btnAddMovieOnline_Click(object sender, EventArgs e)
+        {
+            FilmApiForm addMovieForm = new FilmApiForm();
+            addMovieForm.StartPosition = FormStartPosition.CenterScreen;
+            addMovieForm.ShowDialog();
+            FilmApiSearchResult newFilm = addMovieForm.selectedFilm;
+            Film nieuweFilm = new Film(newFilm);
+
+            mOperatie = Operatie.Creating;
+            ZetKnoppenVolgensOperatie();
+
+            int newFilmId = Repository.GetInstance().GetNewFilmId();
+
+            FillFilmDataInDetails(nieuweFilm);
+
+            tbFilmId.Text = newFilmId.ToString();
         }
     }
 }

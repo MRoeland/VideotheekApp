@@ -31,6 +31,7 @@
             this.filmListView = new System.Windows.Forms.ListView();
             this.filmTabControl = new System.Windows.Forms.TabControl();
             this.tabPageDetails = new System.Windows.Forms.TabPage();
+            this.pbFilmPoster = new System.Windows.Forms.PictureBox();
             this.gbVerhuur = new System.Windows.Forms.GroupBox();
             this.cbAdults = new System.Windows.Forms.CheckBox();
             this.tbPrijs = new System.Windows.Forms.TextBox();
@@ -53,8 +54,12 @@
             this.btnEditMovie = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
+            this.lblErrorMessage = new System.Windows.Forms.Label();
+            this.btnAddMovieOnline = new System.Windows.Forms.Button();
             this.filmTabControl.SuspendLayout();
             this.tabPageDetails.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbFilmPoster)).BeginInit();
             this.gbVerhuur.SuspendLayout();
             this.gbDetails.SuspendLayout();
             this.TabPageReview.SuspendLayout();
@@ -69,7 +74,7 @@
             this.filmListView.Location = new System.Drawing.Point(12, 12);
             this.filmListView.MultiSelect = false;
             this.filmListView.Name = "filmListView";
-            this.filmListView.Size = new System.Drawing.Size(1180, 252);
+            this.filmListView.Size = new System.Drawing.Size(1180, 224);
             this.filmListView.TabIndex = 1;
             this.filmListView.UseCompatibleStateImageBehavior = false;
             this.filmListView.View = System.Windows.Forms.View.Details;
@@ -81,32 +86,42 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.filmTabControl.Controls.Add(this.tabPageDetails);
             this.filmTabControl.Controls.Add(this.TabPageReview);
-            this.filmTabControl.Location = new System.Drawing.Point(12, 327);
+            this.filmTabControl.Location = new System.Drawing.Point(12, 271);
             this.filmTabControl.Name = "filmTabControl";
             this.filmTabControl.SelectedIndex = 0;
-            this.filmTabControl.Size = new System.Drawing.Size(1180, 314);
+            this.filmTabControl.Size = new System.Drawing.Size(1180, 360);
             this.filmTabControl.TabIndex = 2;
             // 
             // tabPageDetails
             // 
+            this.tabPageDetails.Controls.Add(this.pbFilmPoster);
             this.tabPageDetails.Controls.Add(this.gbVerhuur);
             this.tabPageDetails.Controls.Add(this.gbDetails);
             this.tabPageDetails.Location = new System.Drawing.Point(4, 24);
             this.tabPageDetails.Name = "tabPageDetails";
             this.tabPageDetails.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageDetails.Size = new System.Drawing.Size(1172, 286);
+            this.tabPageDetails.Size = new System.Drawing.Size(1172, 332);
             this.tabPageDetails.TabIndex = 0;
             this.tabPageDetails.Text = "Film";
             this.tabPageDetails.UseVisualStyleBackColor = true;
+            // 
+            // pbFilmPoster
+            // 
+            this.pbFilmPoster.Location = new System.Drawing.Point(6, 6);
+            this.pbFilmPoster.Name = "pbFilmPoster";
+            this.pbFilmPoster.Size = new System.Drawing.Size(252, 320);
+            this.pbFilmPoster.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbFilmPoster.TabIndex = 3;
+            this.pbFilmPoster.TabStop = false;
             // 
             // gbVerhuur
             // 
             this.gbVerhuur.Controls.Add(this.cbAdults);
             this.gbVerhuur.Controls.Add(this.tbPrijs);
             this.gbVerhuur.Controls.Add(this.lblPrijs);
-            this.gbVerhuur.Location = new System.Drawing.Point(673, 28);
+            this.gbVerhuur.Location = new System.Drawing.Point(972, 0);
             this.gbVerhuur.Name = "gbVerhuur";
-            this.gbVerhuur.Size = new System.Drawing.Size(493, 240);
+            this.gbVerhuur.Size = new System.Drawing.Size(194, 326);
             this.gbVerhuur.TabIndex = 2;
             this.gbVerhuur.TabStop = false;
             this.gbVerhuur.Text = "Verhuur details";
@@ -114,7 +129,7 @@
             // cbAdults
             // 
             this.cbAdults.AutoSize = true;
-            this.cbAdults.Location = new System.Drawing.Point(32, 111);
+            this.cbAdults.Location = new System.Drawing.Point(15, 103);
             this.cbAdults.Name = "cbAdults";
             this.cbAdults.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.cbAdults.Size = new System.Drawing.Size(129, 19);
@@ -124,7 +139,7 @@
             // 
             // tbPrijs
             // 
-            this.tbPrijs.Location = new System.Drawing.Point(85, 29);
+            this.tbPrijs.Location = new System.Drawing.Point(68, 21);
             this.tbPrijs.Name = "tbPrijs";
             this.tbPrijs.Size = new System.Drawing.Size(100, 23);
             this.tbPrijs.TabIndex = 12;
@@ -132,7 +147,7 @@
             // lblPrijs
             // 
             this.lblPrijs.AutoSize = true;
-            this.lblPrijs.Location = new System.Drawing.Point(32, 32);
+            this.lblPrijs.Location = new System.Drawing.Point(15, 24);
             this.lblPrijs.Name = "lblPrijs";
             this.lblPrijs.Size = new System.Drawing.Size(29, 15);
             this.lblPrijs.TabIndex = 10;
@@ -150,9 +165,9 @@
             this.gbDetails.Controls.Add(this.tbFilmId);
             this.gbDetails.Controls.Add(this.lblId);
             this.gbDetails.Controls.Add(this.lblTitle);
-            this.gbDetails.Location = new System.Drawing.Point(24, 18);
+            this.gbDetails.Location = new System.Drawing.Point(264, 0);
             this.gbDetails.Name = "gbDetails";
-            this.gbDetails.Size = new System.Drawing.Size(619, 250);
+            this.gbDetails.Size = new System.Drawing.Size(702, 329);
             this.gbDetails.TabIndex = 1;
             this.gbDetails.TabStop = false;
             this.gbDetails.Text = "Film details";
@@ -244,7 +259,7 @@
             this.TabPageReview.Location = new System.Drawing.Point(4, 24);
             this.TabPageReview.Name = "TabPageReview";
             this.TabPageReview.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPageReview.Size = new System.Drawing.Size(1172, 286);
+            this.TabPageReview.Size = new System.Drawing.Size(1172, 332);
             this.TabPageReview.TabIndex = 1;
             this.TabPageReview.Text = "Review";
             this.TabPageReview.UseVisualStyleBackColor = true;
@@ -269,7 +284,7 @@
             // btnNewMovie
             // 
             this.btnNewMovie.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnNewMovie.Location = new System.Drawing.Point(12, 282);
+            this.btnNewMovie.Location = new System.Drawing.Point(12, 242);
             this.btnNewMovie.Name = "btnNewMovie";
             this.btnNewMovie.Size = new System.Drawing.Size(75, 23);
             this.btnNewMovie.TabIndex = 3;
@@ -280,7 +295,7 @@
             // btnEditMovie
             // 
             this.btnEditMovie.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnEditMovie.Location = new System.Drawing.Point(12, 660);
+            this.btnEditMovie.Location = new System.Drawing.Point(12, 637);
             this.btnEditMovie.Name = "btnEditMovie";
             this.btnEditMovie.Size = new System.Drawing.Size(75, 23);
             this.btnEditMovie.TabIndex = 4;
@@ -291,7 +306,7 @@
             // btnUpdate
             // 
             this.btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUpdate.Location = new System.Drawing.Point(1117, 660);
+            this.btnUpdate.Location = new System.Drawing.Point(1117, 637);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(75, 23);
             this.btnUpdate.TabIndex = 5;
@@ -302,7 +317,7 @@
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(1023, 660);
+            this.btnCancel.Location = new System.Drawing.Point(1023, 637);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 6;
@@ -310,12 +325,46 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // btnDelete
+            // 
+            this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnDelete.Location = new System.Drawing.Point(93, 637);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(75, 23);
+            this.btnDelete.TabIndex = 7;
+            this.btnDelete.Text = "Delete";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
+            // lblErrorMessage
+            // 
+            this.lblErrorMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblErrorMessage.Location = new System.Drawing.Point(12, 663);
+            this.lblErrorMessage.Name = "lblErrorMessage";
+            this.lblErrorMessage.Size = new System.Drawing.Size(1180, 23);
+            this.lblErrorMessage.TabIndex = 8;
+            // 
+            // btnAddMovieOnline
+            // 
+            this.btnAddMovieOnline.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnAddMovieOnline.Location = new System.Drawing.Point(93, 242);
+            this.btnAddMovieOnline.Name = "btnAddMovieOnline";
+            this.btnAddMovieOnline.Size = new System.Drawing.Size(75, 23);
+            this.btnAddMovieOnline.TabIndex = 9;
+            this.btnAddMovieOnline.Text = "New online";
+            this.btnAddMovieOnline.UseVisualStyleBackColor = true;
+            this.btnAddMovieOnline.Click += new System.EventHandler(this.btnAddMovieOnline_Click);
+            // 
             // FilmsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.YellowGreen;
             this.ClientSize = new System.Drawing.Size(1204, 695);
+            this.Controls.Add(this.btnAddMovieOnline);
+            this.Controls.Add(this.lblErrorMessage);
+            this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnEditMovie);
@@ -326,6 +375,7 @@
             this.Load += new System.EventHandler(this.FilmsForm_Load);
             this.filmTabControl.ResumeLayout(false);
             this.tabPageDetails.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbFilmPoster)).EndInit();
             this.gbVerhuur.ResumeLayout(false);
             this.gbVerhuur.PerformLayout();
             this.gbDetails.ResumeLayout(false);
@@ -363,5 +413,9 @@
         private Label lblReview;
         private TextBox tbReview;
         private Button btnCancel;
+        private Button btnDelete;
+        private Label lblErrorMessage;
+        private Button btnAddMovieOnline;
+        private PictureBox pbFilmPoster;
     }
 }
