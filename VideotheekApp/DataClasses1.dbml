@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="FilmDatabase" Class="DataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\FilmDatabase.mdf;Integrated Security=True" SettingsObjectName="VideotheekApp.Properties.Settings" SettingsPropertyName="FilmDatabaseConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Verhuur" Member="Verhuurs">
+    <Type Name="Verhuur">
+      <Column Name="VerhuurId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="LidId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UitleenDatum" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TerugDatum" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TotaalPrijs" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Association Name="Verhuur_VerhuurLijn" Member="VerhuurLijns" ThisKey="VerhuurId" OtherKey="VerhuurId" Type="VerhuurLijn" />
+    </Type>
+  </Table>
+  <Table Name="dbo.VerhuurLijn" Member="VerhuurLijns">
+    <Type Name="VerhuurLijn">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="VerhuurId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Film" Type="System.String" DbType="NVarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Prijs" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Association Name="Verhuur_VerhuurLijn" Member="Verhuur" ThisKey="VerhuurId" OtherKey="VerhuurId" Type="Verhuur" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

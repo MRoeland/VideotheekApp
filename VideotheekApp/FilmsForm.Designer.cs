@@ -116,6 +116,8 @@
             // 
             // gbVerhuur
             // 
+            this.gbVerhuur.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gbVerhuur.Controls.Add(this.cbAdults);
             this.gbVerhuur.Controls.Add(this.tbPrijs);
             this.gbVerhuur.Controls.Add(this.lblPrijs);
@@ -129,7 +131,7 @@
             // cbAdults
             // 
             this.cbAdults.AutoSize = true;
-            this.cbAdults.Location = new System.Drawing.Point(15, 103);
+            this.cbAdults.Location = new System.Drawing.Point(15, 151);
             this.cbAdults.Name = "cbAdults";
             this.cbAdults.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.cbAdults.Size = new System.Drawing.Size(129, 19);
@@ -139,7 +141,7 @@
             // 
             // tbPrijs
             // 
-            this.tbPrijs.Location = new System.Drawing.Point(68, 21);
+            this.tbPrijs.Location = new System.Drawing.Point(68, 34);
             this.tbPrijs.Name = "tbPrijs";
             this.tbPrijs.Size = new System.Drawing.Size(100, 23);
             this.tbPrijs.TabIndex = 12;
@@ -147,7 +149,7 @@
             // lblPrijs
             // 
             this.lblPrijs.AutoSize = true;
-            this.lblPrijs.Location = new System.Drawing.Point(15, 24);
+            this.lblPrijs.Location = new System.Drawing.Point(15, 37);
             this.lblPrijs.Name = "lblPrijs";
             this.lblPrijs.Size = new System.Drawing.Size(29, 15);
             this.lblPrijs.TabIndex = 10;
@@ -174,7 +176,7 @@
             // 
             // tbGenre
             // 
-            this.tbGenre.Location = new System.Drawing.Point(354, 117);
+            this.tbGenre.Location = new System.Drawing.Point(354, 152);
             this.tbGenre.Name = "tbGenre";
             this.tbGenre.Size = new System.Drawing.Size(153, 23);
             this.tbGenre.TabIndex = 11;
@@ -182,7 +184,7 @@
             // lblGenre
             // 
             this.lblGenre.AutoSize = true;
-            this.lblGenre.Location = new System.Drawing.Point(301, 120);
+            this.lblGenre.Location = new System.Drawing.Point(301, 155);
             this.lblGenre.Name = "lblGenre";
             this.lblGenre.Size = new System.Drawing.Size(38, 15);
             this.lblGenre.TabIndex = 9;
@@ -206,7 +208,7 @@
             // 
             // tbFilmRegiseur
             // 
-            this.tbFilmRegiseur.Location = new System.Drawing.Point(76, 201);
+            this.tbFilmRegiseur.Location = new System.Drawing.Point(76, 262);
             this.tbFilmRegiseur.Name = "tbFilmRegiseur";
             this.tbFilmRegiseur.Size = new System.Drawing.Size(160, 23);
             this.tbFilmRegiseur.TabIndex = 6;
@@ -214,7 +216,7 @@
             // lblRegiseur
             // 
             this.lblRegiseur.AutoSize = true;
-            this.lblRegiseur.Location = new System.Drawing.Point(18, 201);
+            this.lblRegiseur.Location = new System.Drawing.Point(18, 262);
             this.lblRegiseur.Name = "lblRegiseur";
             this.lblRegiseur.Size = new System.Drawing.Size(52, 15);
             this.lblRegiseur.TabIndex = 5;
@@ -222,7 +224,7 @@
             // 
             // tbFilmTitle
             // 
-            this.tbFilmTitle.Location = new System.Drawing.Point(53, 117);
+            this.tbFilmTitle.Location = new System.Drawing.Point(53, 152);
             this.tbFilmTitle.Name = "tbFilmTitle";
             this.tbFilmTitle.Size = new System.Drawing.Size(183, 23);
             this.tbFilmTitle.TabIndex = 4;
@@ -246,7 +248,7 @@
             // lblTitle
             // 
             this.lblTitle.AutoSize = true;
-            this.lblTitle.Location = new System.Drawing.Point(18, 120);
+            this.lblTitle.Location = new System.Drawing.Point(18, 155);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(29, 15);
             this.lblTitle.TabIndex = 1;

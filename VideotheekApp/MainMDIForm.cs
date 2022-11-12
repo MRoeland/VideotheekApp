@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace VideotheekApp
 {
@@ -17,6 +18,12 @@ namespace VideotheekApp
         public List<OpenMdiForm> CurrentlyOpenForms;
         public MainMDIForm()
         {
+            string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string sFile = Path.Combine(sCurrentDirectory, @"..\..\..\FilmDatabase.mdf");
+            string sFilePath = Path.GetFullPath(sFile);
+            sFilePath = sFilePath.Replace("FilmDatabase.mdf", "");
+            AppDomain.CurrentDomain.SetData("DataDirectory", sFilePath);
+
             mDataRepo = Repository.GetInstance();
             mDataRepo.InitialiseDataFromDB();
             CurrentOpenForm = null;

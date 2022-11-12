@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="DataClasses1">
+  <DataContextMoniker Name="/DataClasses1DataContext" />
+  <nestedChildShapes>
+    <classShape Id="2ad122a4-6947-40c9-ae15-c7d55184c1a2" absoluteBounds="0.75, 0.875, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/DataClasses1DataContext/Verhuur" />
+      <nestedChildShapes>
+        <elementListCompartment Id="23dd0809-9f5b-45df-ad6a-ca09f18a4ee4" absoluteBounds="0.765, 1.335, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7a2d8b5e-a307-41be-8a94-4cbaf6fd8ffb" absoluteBounds="3.5, 1, 2, 1.5785953776041663">
+      <DataClassMoniker Name="/DataClasses1DataContext/VerhuurLijn" />
+      <nestedChildShapes>
+        <elementListCompartment Id="333e93f6-14c6-4adf-84d2-5086c1ab235f" absoluteBounds="3.515, 1.46, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.75 : 1.78929768880208); (3.5 : 1.78929768880208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DataClasses1DataContext/Verhuur/Verhuur_VerhuurLijn" />
+      <nodes>
+        <classShapeMoniker Id="2ad122a4-6947-40c9-ae15-c7d55184c1a2" />
+        <classShapeMoniker Id="7a2d8b5e-a307-41be-8a94-4cbaf6fd8ffb" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

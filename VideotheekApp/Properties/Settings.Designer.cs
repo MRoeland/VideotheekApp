@@ -26,11 +26,17 @@ namespace VideotheekApp.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\FilmDatabase." +
-            "mdf;Integrated Security=True")]
+//        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\FilmDatabase." +
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\Matthias\\OneDrive - Erasmushogeschool Brussel\\Documenten\\EHB\\2021-2022\\.net advanced\\oefeningen\\" +
+            "\\VideotheekApp\\VideotheekApp\\FilmDatabase.mdf;Integrated Security=True")]
         public string FilmDatabaseConnectionString {
             get {
-                return ((string)(this["FilmDatabaseConnectionString"]));
+                //return ((string)(this["FilmDatabaseConnectionString"]));
+
+                var appDataPath = (string)AppDomain.CurrentDomain.GetData("DataDirectory");
+                return "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + appDataPath +
+                       "FilmDatabase.mdf;Integrated Security=True";
+
             }
         }
     }

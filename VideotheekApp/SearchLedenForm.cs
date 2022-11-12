@@ -31,5 +31,10 @@ namespace VideotheekApp
         {
 
         }
+
+        private void lvMembers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

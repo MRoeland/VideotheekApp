@@ -47,6 +47,18 @@ namespace VideotheekApp
         {
             MainMDIForm myParent = (MainMDIForm)MdiParent;
             myParent.SwitchSearchForms("SearchFilmsForm", SearchLedenForm.getInstance());
+
+            DataClasses1DataContext linqcontext = new DataClasses1DataContext();
+            Verhuur v = new Verhuur()
+            {
+                LidId = 1,
+                VerhuurId = 1,
+                TotaalPrijs = 5,
+                UitleenDatum = DateTime.Now,
+                TerugDatum = DateTime.Now.AddDays(15)
+            };
+            linqcontext.Verhuurs.InsertOnSubmit(v);
+            linqcontext.SubmitChanges();
         }
 
         private void btnChooseMovies_Click(object sender, EventArgs e)
@@ -116,6 +128,9 @@ namespace VideotheekApp
             {
                 ListViewItem deleteItem = ZoekListViewItemVoorFilm(selectedFilm);
                 lvFilmList.Items.Remove(deleteItem);
+
+                totaalPrijs -= selectedFilm.Prijs;
+                tbPrice.Text = totaalPrijs.ToString();
             }
         }
 

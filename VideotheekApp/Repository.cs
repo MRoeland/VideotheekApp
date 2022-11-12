@@ -13,13 +13,25 @@ namespace VideotheekApp
     {
         private static Repository DeRepository;
         public FilmLijst Films { get; set; }
-        private string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\Matthias\\OneDrive - Erasmushogeschool Brussel\\Documenten\\EHB\\2021-2022\\.net advanced\\oefeningen" +
-            "\\VideotheekApp\\VideotheekApp\\FilmDatabase.mdf\";Integrated Security = True";
+        public LidLijst Leden { get; set; }
+
+        LedenDataClassDataContext ledenContext = new LedenDataClassDataContext();
+
+
+
+        private string connectionString;
+        /* = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\Matthias\\OneDrive - Erasmushogeschool Brussel\\Documenten\\EHB\\2021-2022\\.net advanced\\oefeningen" +
+            "\\VideotheekApp\\VideotheekApp\\FilmDatabase.mdf\";Integrated Security = True";*/
 
         public Repository()
         {
             DeRepository = null;
             Films = new FilmLijst();
+            Leden = new LidLijst();
+
+            var appDataPath = (string)AppDomain.CurrentDomain.GetData("DataDirectory");
+            connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + appDataPath +
+                   "FilmDatabase.mdf;Integrated Security=True";
         }
 
         public static Repository GetInstance()
@@ -35,6 +47,7 @@ namespace VideotheekApp
         public void InitialiseDataFromDB()
         {
             LeesFilms();
+            LeesLeden();
         }
 
         public void LeesFilms()
@@ -252,5 +265,36 @@ namespace VideotheekApp
 
             return returnMessage;
         }
+
+        public int GetNewLidId()
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            SqlCommand commando = new SqlCommand("SELECT NEXT VALUE FOR SequenceFilmId", connection);
+
+            connection.Open();
+
+            SqlDataReader reader = commando.ExecuteReader();
+            reader.Read();
+
+            long nieuwLidId = reader.GetInt64(0);
+
+            reader.Close();
+            connection.Close();
+
+            return (int)nieuwLidId;
+        }
+
+        public String LeesLeden()
+        {
+            string errorMessage = "";
+
+            LedenDataClassDataContext context = new LedenDataClassDataContext();
+
+            
+            
+
+            return errorMessage;
+        }
+
     }
 }

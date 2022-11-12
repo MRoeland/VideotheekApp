@@ -91,20 +91,26 @@ namespace VideotheekApp
             tbGenre.Text = f.Genre;
             tbPrijs.Text = f.Prijs.ToString();
             cbAdults.Checked = f.AdultRating;
+            
             tbReview.Text = f.Review;
-            if(f.Poster != "" && f.Poster != null)
+            bool loaded = false;
+            if (f.Poster != "" && f.Poster != null)
             {
-                pbFilmPoster.Load(f.Poster);
+                if (Globals.UrlIsValid(f.Poster) || File.Exists(f.Poster))
+                {
+                    pbFilmPoster.Load(f.Poster);
+                    loaded = true;
+                } 
             }
-            else
+            if(!loaded)
             {
                 Assembly myAssembly = Assembly.GetExecutingAssembly();
                 Stream myStream = myAssembly.GetManifestResourceStream("VideotheekApp.images.NoMovieAvailable.png");
                 Bitmap bmp = new Bitmap(myStream);
 
                 pbFilmPoster.Image = bmp;
-
             }
+            
         }
 
         private void MakeTextBoxesReadOnly(Control.ControlCollection c, bool readOnly)
