@@ -8,13 +8,24 @@
       <Column Name="TerugDatum" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="TotaalPrijs" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
       <Association Name="Verhuur_VerhuurLijn" Member="VerhuurLijns" ThisKey="VerhuurId" OtherKey="VerhuurId" Type="VerhuurLijn" />
+      <Association Name="Leden_Verhuur" Member="Leden" ThisKey="LidId" OtherKey="Id" Type="Leden" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Leden" Member="Ledens">
+    <Type Name="Leden">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Naam" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Adres" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="TelNr" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Association Name="Leden_Verhuur" Member="Verhuurs" ThisKey="Id" OtherKey="LidId" Type="Verhuur" />
     </Type>
   </Table>
   <Table Name="dbo.VerhuurLijn" Member="VerhuurLijns">
     <Type Name="VerhuurLijn">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="VerhuurId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="Film" Type="System.String" DbType="NVarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="FilmId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Prijs" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
       <Association Name="Verhuur_VerhuurLijn" Member="Verhuur" ThisKey="VerhuurId" OtherKey="VerhuurId" Type="Verhuur" IsForeignKey="true" />
     </Type>

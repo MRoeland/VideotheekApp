@@ -84,7 +84,7 @@ namespace VideotheekApp
             {
                 return;
             }
-                
+
             ListViewItem selectedItem = lvFilms.SelectedItems[0];
             SelectedFilm = (Film)selectedItem.Tag;
         }

@@ -8,6 +8,7 @@ namespace VideotheekApp
 {
     public class Lid
     {
+        public int Id { get; set; }
         public String Naam { get; set; }
         public String Adres { get; set; }
         public String Telnr { get; set; }

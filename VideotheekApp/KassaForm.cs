@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.DirectoryServices.ActiveDirectory;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,11 +17,13 @@ namespace VideotheekApp
         private static KassaForm SingletonInstance;
         public Film selectedFilm;
         public float totaalPrijs;
+        public Lid currentLid;
 
         public KassaForm()
         {
             totaalPrijs = 0;
             selectedFilm = null;
+            currentLid = null;
             InitializeComponent();
         }
 
@@ -47,18 +50,7 @@ namespace VideotheekApp
         {
             MainMDIForm myParent = (MainMDIForm)MdiParent;
             myParent.SwitchSearchForms("SearchFilmsForm", SearchLedenForm.getInstance());
-
-            DataClasses1DataContext linqcontext = new DataClasses1DataContext();
-            Verhuur v = new Verhuur()
-            {
-                LidId = 1,
-                VerhuurId = 1,
-                TotaalPrijs = 5,
-                UitleenDatum = DateTime.Now,
-                TerugDatum = DateTime.Now.AddDays(15)
-            };
-            linqcontext.Verhuurs.InsertOnSubmit(v);
-            linqcontext.SubmitChanges();
+            SearchLedenForm.getInstance().OnSendMessage += NieuwLidGeselecteerd;
         }
 
         private void btnChooseMovies_Click(object sender, EventArgs e)
@@ -116,6 +108,7 @@ namespace VideotheekApp
                     lvFilmList.Items.Add(item);
 
                     tbPrice.Text = "€ " + totaalPrijs.ToString();
+                    tbDatum.Text = DateTime.Now.ToString("dd/mm/yyyy", CultureInfo.InvariantCulture);
                 }
             }
         }
@@ -130,7 +123,8 @@ namespace VideotheekApp
                 lvFilmList.Items.Remove(deleteItem);
 
                 totaalPrijs -= selectedFilm.Prijs;
-                tbPrice.Text = totaalPrijs.ToString();
+                tbPrice.Text = "€ " + totaalPrijs.ToString();
+                tbDatum.Text = DateTime.Now.ToString("dd/mm/yyyy", CultureInfo.InvariantCulture);
             }
         }
 
@@ -156,6 +150,68 @@ namespace VideotheekApp
 
             ListViewItem selectedItem = lvFilmList.SelectedItems[0];
             selectedFilm = (Film)selectedItem.Tag;
+        }
+
+        public void NieuwLidGeselecteerd(object obj, EventArgs e, string lidIdToPass)
+        {
+            Repository repo = Repository.GetInstance();
+            for (int i = 0; i < repo.Leden.Count; i++)
+            {
+                if (repo.Leden[i].Id == int.Parse(lidIdToPass))
+                {
+                    tbNaamLid.Text = repo.Leden[i].Naam;
+                    tbAdresLid.Text = repo.Leden[i].Adres;
+                    tbEmailLid.Text = repo.Leden[i].Email;
+                    tbTelNrLid.Text = repo.Leden[i].Telnr;
+
+                    currentLid = new Lid();
+                    currentLid.Id = repo.Leden[i].Id;
+                    currentLid.Naam = repo.Leden[i].Naam;
+                    currentLid.Adres = repo.Leden[i].Adres;
+                    currentLid.Email = repo.Leden[i].Email;
+                    currentLid.Telnr = repo.Leden[i].Telnr;
+                }
+            }
+        }
+
+        private void btnBetalen_Click(object sender, EventArgs e)
+        {
+            if(currentLid == null)
+            {
+                MessageBox.Show("U heeft geen lid gekozen!", "Geen lid");
+                return;
+            }
+
+            if(lvFilmList.Items.Count == 0)
+            {
+                MessageBox.Show("U heeft geen films gekozen!", "Geen films");
+                return;
+            }
+
+            Verhuur nieuwVerhuur = new Verhuur();
+            nieuwVerhuur.VerhuurId = Repository.GetInstance().GetNewVerhuurId();
+            nieuwVerhuur.LidId = currentLid.Id;
+            nieuwVerhuur.UitleenDatum = DateTime.Now;
+            nieuwVerhuur.TerugDatum = null;
+            nieuwVerhuur.TotaalPrijs = (decimal)totaalPrijs;
+            Repository.GetInstance().SlaVerhuurOpInDatabase(nieuwVerhuur);
+
+            VerhuurLijn lijn;
+            
+            for(int i = 0; i < lvFilmList.Items.Count; i++)
+            {
+                lijn = new VerhuurLijn();
+                Film f = (Film)lvFilmList.Items[i].Tag;
+
+                lijn.Id = Repository.GetInstance().GetNewVerhuurLijnId();
+                lijn.VerhuurId = nieuwVerhuur.VerhuurId;
+                lijn.FilmId = f.Id;
+                lijn.Prijs = (decimal)f.Prijs;
+
+                Repository.GetInstance().SlaVerhuurLijnOpInDatabase(lijn);
+            }
+
+            MessageBox.Show("Succesvolle uitlening!", "Succes");
         }
     }
 }

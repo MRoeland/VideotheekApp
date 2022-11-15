@@ -12,12 +12,8 @@ namespace VideotheekApp
     public class Repository
     {
         private static Repository DeRepository;
-        public FilmLijst Films { get; set; }
-        public LidLijst Leden { get; set; }
-
-        LedenDataClassDataContext ledenContext = new LedenDataClassDataContext();
-
-
+        public List<Film> Films { get; set; }
+        public List<Lid> Leden { get; set; } 
 
         private string connectionString;
         /* = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\Matthias\\OneDrive - Erasmushogeschool Brussel\\Documenten\\EHB\\2021-2022\\.net advanced\\oefeningen" +
@@ -26,8 +22,8 @@ namespace VideotheekApp
         public Repository()
         {
             DeRepository = null;
-            Films = new FilmLijst();
-            Leden = new LidLijst();
+            Films = new List<Film>();
+            Leden = new List<Lid>();
 
             var appDataPath = (string)AppDomain.CurrentDomain.GetData("DataDirectory");
             connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + appDataPath +
@@ -269,32 +265,134 @@ namespace VideotheekApp
         public int GetNewLidId()
         {
             SqlConnection connection = new SqlConnection(connectionString);
-            SqlCommand commando = new SqlCommand("SELECT NEXT VALUE FOR SequenceFilmId", connection);
+            SqlCommand commando = new SqlCommand("SELECT NEXT VALUE FOR SequenceLidId", connection);
 
             connection.Open();
 
             SqlDataReader reader = commando.ExecuteReader();
             reader.Read();
 
-            long nieuwLidId = reader.GetInt64(0);
+            int nieuwLidId = reader.GetInt32(0);
 
             reader.Close();
             connection.Close();
 
-            return (int)nieuwLidId;
+            return nieuwLidId;
         }
 
-        public String LeesLeden()
+        public void LeesLeden()
         {
-            string errorMessage = "";
-
-            LedenDataClassDataContext context = new LedenDataClassDataContext();
-
-            
-            
-
-            return errorMessage;
+            DataClasses1DataContext linqcontext = new DataClasses1DataContext();
+            var leden = (from c in linqcontext.Ledens select c).ToList();
+            foreach (Leden l in leden)
+            {
+                Lid lid = new();
+                lid.Id = l.Id;
+                lid.Naam = l.Naam;
+                lid.Adres = l.Adres;
+                lid.Telnr = l.TelNr;
+                lid.Email = l.Email;
+                Leden.Add(lid);
+            }
         }
 
+        public void InsertNieuwLidInDatabase(Lid l)
+        {
+            DataClasses1DataContext linqcontext = new DataClasses1DataContext();
+            Leden newLid = new Leden()
+            {
+                Id = l.Id,
+                Naam = l.Naam,
+                Adres = l.Adres,
+                TelNr = l.Telnr,
+                Email = l.Email
+            };
+            linqcontext.Ledens.InsertOnSubmit(newLid);
+            linqcontext.SubmitChanges();
+        }
+
+        public void DeleteLidFromDatabase(Lid l)
+        {
+            DataClasses1DataContext linqcontext = new DataClasses1DataContext();
+            Leden objLid = linqcontext.Ledens.Single(lid => lid.Id == l.Id);
+            linqcontext.Ledens.DeleteOnSubmit(objLid);
+            linqcontext.SubmitChanges();
+        }
+
+        public void SlaLidOpInDatabase(Lid l)
+        {
+            DataClasses1DataContext linqcontext = new DataClasses1DataContext();
+            Leden objLid = linqcontext.Ledens.Single(lid => lid.Id == l.Id);
+
+            objLid.Naam = l.Naam;
+            objLid.Adres = l.Adres;
+            objLid.TelNr = l.Telnr;
+            objLid.Email = l.Email;
+            linqcontext.SubmitChanges();
+        }
+
+        public void SlaVerhuurOpInDatabase(Verhuur v)
+        {
+            DataClasses1DataContext linqcontext = new DataClasses1DataContext();
+            Verhuur newVerhuur = new Verhuur()
+            {
+                VerhuurId = v.VerhuurId,
+                LidId = v.LidId,
+                UitleenDatum = v.UitleenDatum,
+                TerugDatum = v.TerugDatum,
+                TotaalPrijs = v.TotaalPrijs
+            };
+            linqcontext.Verhuurs.InsertOnSubmit(newVerhuur);
+            linqcontext.SubmitChanges();
+        }
+
+        public int GetNewVerhuurId()
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            SqlCommand commando = new SqlCommand("SELECT NEXT VALUE FOR SequenceVerhuurId", connection);
+
+            connection.Open();
+
+            SqlDataReader reader = commando.ExecuteReader();
+            reader.Read();
+
+            int nieuwVerhuurId = reader.GetInt32(0);
+
+            reader.Close();
+            connection.Close();
+
+            return nieuwVerhuurId;
+        }
+        public void SlaVerhuurLijnOpInDatabase(VerhuurLijn v)
+        {
+            DataClasses1DataContext linqcontext = new DataClasses1DataContext();
+            VerhuurLijn newVerhuurLijn = new VerhuurLijn()
+            {
+                Id = v.Id,
+                VerhuurId = v.VerhuurId,
+                FilmId = v.FilmId,
+                Prijs = v.Prijs
+            };
+            linqcontext.VerhuurLijns.InsertOnSubmit(newVerhuurLijn);
+            linqcontext.SubmitChanges();
+        }
+
+        public int GetNewVerhuurLijnId()
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            SqlCommand commando = new SqlCommand("SELECT NEXT VALUE FOR SequenceVerhuurLijnId", connection);
+
+            connection.Open();
+
+            SqlDataReader reader = commando.ExecuteReader();
+            reader.Read();
+
+            int nieuwVerhuurId = reader.GetInt32(0);
+
+            reader.Close();
+            connection.Close();
+
+            return nieuwVerhuurId;
+        }
     }
 }

@@ -33,6 +33,9 @@ namespace VideotheekApp
     partial void InsertVerhuur(Verhuur instance);
     partial void UpdateVerhuur(Verhuur instance);
     partial void DeleteVerhuur(Verhuur instance);
+    partial void InsertLeden(Leden instance);
+    partial void UpdateLeden(Leden instance);
+    partial void DeleteLeden(Leden instance);
     partial void InsertVerhuurLijn(VerhuurLijn instance);
     partial void UpdateVerhuurLijn(VerhuurLijn instance);
     partial void DeleteVerhuurLijn(VerhuurLijn instance);
@@ -76,6 +79,14 @@ namespace VideotheekApp
 			}
 		}
 		
+		public System.Data.Linq.Table<Leden> Ledens
+		{
+			get
+			{
+				return this.GetTable<Leden>();
+			}
+		}
+		
 		public System.Data.Linq.Table<VerhuurLijn> VerhuurLijns
 		{
 			get
@@ -103,6 +114,8 @@ namespace VideotheekApp
 		
 		private EntitySet<VerhuurLijn> _VerhuurLijns;
 		
+		private EntityRef<Leden> _Leden;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -122,6 +135,7 @@ namespace VideotheekApp
 		public Verhuur()
 		{
 			this._VerhuurLijns = new EntitySet<VerhuurLijn>(new Action<VerhuurLijn>(this.attach_VerhuurLijns), new Action<VerhuurLijn>(this.detach_VerhuurLijns));
+			this._Leden = default(EntityRef<Leden>);
 			OnCreated();
 		}
 		
@@ -156,6 +170,10 @@ namespace VideotheekApp
 			{
 				if ((this._LidId != value))
 				{
+					if (this._Leden.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnLidIdChanging(value);
 					this.SendPropertyChanging();
 					this._LidId = value;
@@ -238,6 +256,40 @@ namespace VideotheekApp
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Leden_Verhuur", Storage="_Leden", ThisKey="LidId", OtherKey="Id", IsForeignKey=true)]
+		public Leden Leden
+		{
+			get
+			{
+				return this._Leden.Entity;
+			}
+			set
+			{
+				Leden previousValue = this._Leden.Entity;
+				if (((previousValue != value) 
+							|| (this._Leden.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Leden.Entity = null;
+						previousValue.Verhuurs.Remove(this);
+					}
+					this._Leden.Entity = value;
+					if ((value != null))
+					{
+						value.Verhuurs.Add(this);
+						this._LidId = value.Id;
+					}
+					else
+					{
+						this._LidId = default(int);
+					}
+					this.SendPropertyChanged("Leden");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -271,6 +323,192 @@ namespace VideotheekApp
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Leden")]
+	public partial class Leden : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _Naam;
+		
+		private string _Adres;
+		
+		private string _TelNr;
+		
+		private string _Email;
+		
+		private EntitySet<Verhuur> _Verhuurs;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnNaamChanging(string value);
+    partial void OnNaamChanged();
+    partial void OnAdresChanging(string value);
+    partial void OnAdresChanged();
+    partial void OnTelNrChanging(string value);
+    partial void OnTelNrChanged();
+    partial void OnEmailChanging(string value);
+    partial void OnEmailChanged();
+    #endregion
+		
+		public Leden()
+		{
+			this._Verhuurs = new EntitySet<Verhuur>(new Action<Verhuur>(this.attach_Verhuurs), new Action<Verhuur>(this.detach_Verhuurs));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Naam", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Naam
+		{
+			get
+			{
+				return this._Naam;
+			}
+			set
+			{
+				if ((this._Naam != value))
+				{
+					this.OnNaamChanging(value);
+					this.SendPropertyChanging();
+					this._Naam = value;
+					this.SendPropertyChanged("Naam");
+					this.OnNaamChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Adres", DbType="NVarChar(255) NOT NULL", CanBeNull=false)]
+		public string Adres
+		{
+			get
+			{
+				return this._Adres;
+			}
+			set
+			{
+				if ((this._Adres != value))
+				{
+					this.OnAdresChanging(value);
+					this.SendPropertyChanging();
+					this._Adres = value;
+					this.SendPropertyChanged("Adres");
+					this.OnAdresChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TelNr", DbType="NVarChar(10) NOT NULL", CanBeNull=false)]
+		public string TelNr
+		{
+			get
+			{
+				return this._TelNr;
+			}
+			set
+			{
+				if ((this._TelNr != value))
+				{
+					this.OnTelNrChanging(value);
+					this.SendPropertyChanging();
+					this._TelNr = value;
+					this.SendPropertyChanged("TelNr");
+					this.OnTelNrChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Email", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string Email
+		{
+			get
+			{
+				return this._Email;
+			}
+			set
+			{
+				if ((this._Email != value))
+				{
+					this.OnEmailChanging(value);
+					this.SendPropertyChanging();
+					this._Email = value;
+					this.SendPropertyChanged("Email");
+					this.OnEmailChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Leden_Verhuur", Storage="_Verhuurs", ThisKey="Id", OtherKey="LidId")]
+		public EntitySet<Verhuur> Verhuurs
+		{
+			get
+			{
+				return this._Verhuurs;
+			}
+			set
+			{
+				this._Verhuurs.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Verhuurs(Verhuur entity)
+		{
+			this.SendPropertyChanging();
+			entity.Leden = this;
+		}
+		
+		private void detach_Verhuurs(Verhuur entity)
+		{
+			this.SendPropertyChanging();
+			entity.Leden = null;
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.VerhuurLijn")]
 	public partial class VerhuurLijn : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -281,7 +519,7 @@ namespace VideotheekApp
 		
 		private int _VerhuurId;
 		
-		private string _Film;
+		private int _FilmId;
 		
 		private decimal _Prijs;
 		
@@ -295,8 +533,8 @@ namespace VideotheekApp
     partial void OnIdChanged();
     partial void OnVerhuurIdChanging(int value);
     partial void OnVerhuurIdChanged();
-    partial void OnFilmChanging(string value);
-    partial void OnFilmChanged();
+    partial void OnFilmIdChanging(int value);
+    partial void OnFilmIdChanged();
     partial void OnPrijsChanging(decimal value);
     partial void OnPrijsChanged();
     #endregion
@@ -351,22 +589,22 @@ namespace VideotheekApp
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Film", DbType="NVarChar(1) NOT NULL", CanBeNull=false)]
-		public string Film
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FilmId", DbType="Int NOT NULL")]
+		public int FilmId
 		{
 			get
 			{
-				return this._Film;
+				return this._FilmId;
 			}
 			set
 			{
-				if ((this._Film != value))
+				if ((this._FilmId != value))
 				{
-					this.OnFilmChanging(value);
+					this.OnFilmIdChanging(value);
 					this.SendPropertyChanging();
-					this._Film = value;
-					this.SendPropertyChanged("Film");
-					this.OnFilmChanged();
+					this._FilmId = value;
+					this.SendPropertyChanged("FilmId");
+					this.OnFilmIdChanged();
 				}
 			}
 		}

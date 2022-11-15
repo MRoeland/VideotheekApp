@@ -76,6 +76,7 @@
             this.btnSearchMembers.TabIndex = 3;
             this.btnSearchMembers.Text = "Zoek";
             this.btnSearchMembers.UseVisualStyleBackColor = true;
+            this.btnSearchMembers.Click += new System.EventHandler(this.btnSearchMembers_Click);
             // 
             // btnResetSearch
             // 
@@ -86,6 +87,7 @@
             this.btnResetSearch.TabIndex = 4;
             this.btnResetSearch.Text = "Reset lijst";
             this.btnResetSearch.UseVisualStyleBackColor = true;
+            this.btnResetSearch.Click += new System.EventHandler(this.btnResetSearch_Click);
             // 
             // btnChooseMemeber
             // 
@@ -96,6 +98,7 @@
             this.btnChooseMemeber.TabIndex = 5;
             this.btnChooseMemeber.Text = "Kies lid";
             this.btnChooseMemeber.UseVisualStyleBackColor = true;
+            this.btnChooseMemeber.Click += new System.EventHandler(this.btnChooseMemeber_Click);
             // 
             // SearchLedenForm
             // 

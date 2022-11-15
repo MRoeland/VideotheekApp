@@ -47,7 +47,6 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
-            this.lblErrorMessage = new System.Windows.Forms.Label();
             this.gbUitleningen.SuspendLayout();
             this.gbDetails.SuspendLayout();
             this.SuspendLayout();
@@ -55,7 +54,7 @@
             // btnAddMember
             // 
             this.btnAddMember.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAddMember.Location = new System.Drawing.Point(12, 136);
+            this.btnAddMember.Location = new System.Drawing.Point(12, 145);
             this.btnAddMember.Name = "btnAddMember";
             this.btnAddMember.Size = new System.Drawing.Size(94, 23);
             this.btnAddMember.TabIndex = 0;
@@ -72,10 +71,11 @@
             this.lvLeden.Location = new System.Drawing.Point(12, 12);
             this.lvLeden.MultiSelect = false;
             this.lvLeden.Name = "lvLeden";
-            this.lvLeden.Size = new System.Drawing.Size(776, 118);
+            this.lvLeden.Size = new System.Drawing.Size(776, 127);
             this.lvLeden.TabIndex = 1;
             this.lvLeden.UseCompatibleStateImageBehavior = false;
             this.lvLeden.View = System.Windows.Forms.View.Details;
+            this.lvLeden.SelectedIndexChanged += new System.EventHandler(this.lvLeden_SelectedIndexChanged);
             // 
             // gbUitleningen
             // 
@@ -83,7 +83,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbUitleningen.BackColor = System.Drawing.Color.White;
             this.gbUitleningen.Controls.Add(this.lvUitleningen);
-            this.gbUitleningen.Location = new System.Drawing.Point(313, 165);
+            this.gbUitleningen.Location = new System.Drawing.Point(313, 174);
             this.gbUitleningen.Name = "gbUitleningen";
             this.gbUitleningen.Size = new System.Drawing.Size(475, 249);
             this.gbUitleningen.TabIndex = 7;
@@ -118,7 +118,7 @@
             this.gbDetails.Controls.Add(this.lblAdres);
             this.gbDetails.Controls.Add(this.lblName);
             this.gbDetails.Controls.Add(this.tbName);
-            this.gbDetails.Location = new System.Drawing.Point(12, 165);
+            this.gbDetails.Location = new System.Drawing.Point(12, 174);
             this.gbDetails.Name = "gbDetails";
             this.gbDetails.Size = new System.Drawing.Size(284, 249);
             this.gbDetails.TabIndex = 6;
@@ -208,7 +208,7 @@
             // btnUpdate
             // 
             this.btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUpdate.Location = new System.Drawing.Point(713, 420);
+            this.btnUpdate.Location = new System.Drawing.Point(713, 429);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(75, 23);
             this.btnUpdate.TabIndex = 8;
@@ -219,7 +219,7 @@
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(632, 420);
+            this.btnCancel.Location = new System.Drawing.Point(632, 429);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 9;
@@ -230,7 +230,7 @@
             // btnEdit
             // 
             this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnEdit.Location = new System.Drawing.Point(12, 420);
+            this.btnEdit.Location = new System.Drawing.Point(12, 429);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(75, 23);
             this.btnEdit.TabIndex = 10;
@@ -241,7 +241,7 @@
             // btnDelete
             // 
             this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnDelete.Location = new System.Drawing.Point(93, 420);
+            this.btnDelete.Location = new System.Drawing.Point(93, 429);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(79, 23);
             this.btnDelete.TabIndex = 11;
@@ -249,22 +249,12 @@
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
-            // lblErrorMessage
-            // 
-            this.lblErrorMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblErrorMessage.Location = new System.Drawing.Point(12, 461);
-            this.lblErrorMessage.Name = "lblErrorMessage";
-            this.lblErrorMessage.Size = new System.Drawing.Size(776, 31);
-            this.lblErrorMessage.TabIndex = 12;
-            // 
             // LedenForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.IndianRed;
-            this.ClientSize = new System.Drawing.Size(800, 501);
-            this.Controls.Add(this.lblErrorMessage);
+            this.ClientSize = new System.Drawing.Size(800, 510);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnEdit);
             this.Controls.Add(this.btnCancel);
@@ -304,6 +294,5 @@
         private ListView lvUitleningen;
         private TextBox tbId;
         private Label lblId;
-        private Label lblErrorMessage;
     }
 }
