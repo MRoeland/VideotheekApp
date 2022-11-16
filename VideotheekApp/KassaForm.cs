@@ -108,7 +108,7 @@ namespace VideotheekApp
                     lvFilmList.Items.Add(item);
 
                     tbPrice.Text = "€ " + totaalPrijs.ToString();
-                    tbDatum.Text = DateTime.Now.ToString("dd/mm/yyyy", CultureInfo.InvariantCulture);
+                    tbDatum.Text = DateTime.Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
                 }
             }
         }
@@ -124,7 +124,7 @@ namespace VideotheekApp
 
                 totaalPrijs -= selectedFilm.Prijs;
                 tbPrice.Text = "€ " + totaalPrijs.ToString();
-                tbDatum.Text = DateTime.Now.ToString("dd/mm/yyyy", CultureInfo.InvariantCulture);
+                tbDatum.Text = DateTime.Now.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
             }
         }
 
@@ -145,9 +145,11 @@ namespace VideotheekApp
         {
             if (lvFilmList.SelectedItems.Count == 0)
             {
+                btnRemove.Visible = false;
                 return;
             }
 
+            btnRemove.Visible = true;
             ListViewItem selectedItem = lvFilmList.SelectedItems[0];
             selectedFilm = (Film)selectedItem.Tag;
         }
@@ -207,6 +209,8 @@ namespace VideotheekApp
                 lijn.VerhuurId = nieuwVerhuur.VerhuurId;
                 lijn.FilmId = f.Id;
                 lijn.Prijs = (decimal)f.Prijs;
+                lijn.UitleenDatum = DateTime.Now;
+                lijn.TerugDatum = null;
 
                 Repository.GetInstance().SlaVerhuurLijnOpInDatabase(lijn);
             }

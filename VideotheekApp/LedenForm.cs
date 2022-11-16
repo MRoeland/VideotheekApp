@@ -15,10 +15,12 @@ namespace VideotheekApp
         private static LedenForm SingletonInstance;
         public Lid selectedLid;
         private Operatie mOperatie;
+        public VerhuurLijn selectedLijn;
 
         public LedenForm()
         {
             selectedLid = null;
+            selectedLijn = null;
             mOperatie = Operatie.Viewing;
             SingletonInstance = null;
             InitializeComponent();
@@ -53,6 +55,10 @@ namespace VideotheekApp
             lvLeden.Columns.Insert(1, "Adres", 250);
             lvLeden.Columns.Insert(2, "Tel nr", 250);
             lvLeden.Columns.Insert(3, "Email", 250);
+
+            lvUitleningen.Columns.Insert(0, "Film", 300);
+            lvUitleningen.Columns.Insert(1, "Uitleendatum", 200);
+            lvUitleningen.Columns.Insert(2, "Terugbreng datum", 200);
         }
 
         private void ZetKnoppenVolgensOperatie()
@@ -138,10 +144,58 @@ namespace VideotheekApp
 
         public void FillMemberDetails(Lid l)
         {
+            tbId.Text = l.Id.ToString();
             tbName.Text = l.Naam;
             tbAdres.Text = l.Adres;
             tbNr.Text = l.Telnr;
             tbEmail.Text = l.Email;
+
+            
+        }
+
+        public void FillAllUitleningen(Lid l)
+        {
+            Repository repo = Repository.GetInstance();
+            lvUitleningen.Items.Clear();
+            repo.HaalVerhuurAfMetLidId(l);
+            for (int i = 0; i < repo.VerhuurLijnenVanLid.Count; i++)
+            {
+                Film f =repo.HaalFilmVanVerhuurLijn(repo.VerhuurLijnenVanLid[i]);
+                if(f == null)
+                {
+                    continue;
+                }
+                ListViewItem item = new ListViewItem(f.Title);
+                item.SubItems.Add(repo.VerhuurLijnenVanLid[i].UitleenDatum.ToString());
+                item.SubItems.Add(repo.VerhuurLijnenVanLid[i].TerugDatum.ToString());
+
+                item.Tag = repo.VerhuurLijnenVanLid[i];
+                lvUitleningen.Items.Add(item);
+            }
+        }
+
+        public void FillUitleningenNotReturned(Lid l)
+        {
+            Repository repo = Repository.GetInstance();
+            lvUitleningen.Items.Clear();
+            repo.HaalVerhuurAfMetLidId(l);
+            for (int i = 0; i < repo.VerhuurLijnenVanLid.Count; i++)
+            {
+                if(repo.VerhuurLijnenVanLid[i].TerugDatum == null)
+                {
+                    Film f = repo.HaalFilmVanVerhuurLijn(repo.VerhuurLijnenVanLid[i]);
+                    if(f == null)
+                    {
+                        continue;
+                    }
+                    ListViewItem item = new ListViewItem(f.Title);
+                    item.SubItems.Add(repo.VerhuurLijnenVanLid[i].UitleenDatum.ToString());
+                    item.SubItems.Add(repo.VerhuurLijnenVanLid[i].TerugDatum.ToString());
+
+                    item.Tag = repo.VerhuurLijnenVanLid[i];
+                    lvUitleningen.Items.Add(item);
+                }
+            }
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
@@ -234,23 +288,6 @@ namespace VideotheekApp
             }
         }
 
-        private void lvLeden_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if(lvLeden.SelectedItems.Count == 0)
-            {
-                btnEdit.Enabled = false;
-                selectedLid = null;
-                return;
-            }
-
-            ListViewItem selectedLidItem = lvLeden.SelectedItems[0];
-            selectedLid = (Lid)selectedLidItem.Tag;
-
-            FillMemberDetails(selectedLid);
-
-            btnEdit.Enabled = true;
-        }
-
         private ListViewItem ZoekListViewItemVoorLid(Lid l)
         {
             foreach (ListViewItem i in lvLeden.Items)
@@ -262,6 +299,71 @@ namespace VideotheekApp
             }
 
             return null;
+        }
+
+        private void cbNotReturned_CheckedChanged(object sender, EventArgs e)
+        {
+            if(cbNotReturned.Checked == true)
+            {
+                FillUitleningenNotReturned(selectedLid);
+            }
+            else if(cbNotReturned.Checked == false)
+            {
+                FillAllUitleningen(selectedLid);
+            }
+        }
+
+        private void btnReturnFilm_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Wil je deze film terugbrengen?", "Terugbrengen film", MessageBoxButtons.YesNo);
+
+            if (result == DialogResult.Yes)
+            {
+                selectedLijn.TerugDatum = DateTime.Now;
+                Repository.GetInstance().SlaLijnOpInDatabase(selectedLijn);
+
+                if(cbNotReturned.Checked == true)
+                {
+                    FillUitleningenNotReturned(selectedLid);
+                }
+                else if(cbNotReturned.Checked == false)
+                {
+                    FillAllUitleningen(selectedLid);
+                }
+            }
+        }
+
+        private void lvUitleningen_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lvUitleningen.SelectedItems.Count == 0)
+            {
+                btnReturnFilm.Visible = false;
+                selectedLijn = null;
+                return;
+            }
+
+            btnReturnFilm.Visible = true;
+            ListViewItem selectedLidItem = lvUitleningen.SelectedItems[0];
+            selectedLijn = (VerhuurLijn)selectedLidItem.Tag;
+        }
+
+        private void lvLeden_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
+            if (lvLeden.SelectedItems.Count == 0)
+            {
+                btnEdit.Enabled = false;
+                selectedLid = null;
+                return;
+            }
+
+            ListViewItem selectedLidItem = lvLeden.SelectedItems[0];
+            selectedLid = (Lid)selectedLidItem.Tag;
+
+            FillMemberDetails(selectedLid);
+            FillAllUitleningen(selectedLid);
+
+            btnEdit.Enabled = true;
         }
     }
 }

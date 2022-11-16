@@ -104,7 +104,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.SlateBlue;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(254)))), ((int)(((byte)(226)))));
             this.ClientSize = new System.Drawing.Size(432, 551);
             this.Controls.Add(this.btnChooseMemeber);
             this.Controls.Add(this.btnResetSearch);

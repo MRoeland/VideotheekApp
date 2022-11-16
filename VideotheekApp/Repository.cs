@@ -13,7 +13,9 @@ namespace VideotheekApp
     {
         private static Repository DeRepository;
         public List<Film> Films { get; set; }
-        public List<Lid> Leden { get; set; } 
+        public List<Lid> Leden { get; set; }
+        public List<VerhuurLijn> VerhuurLijnenVanLid { get; set; }
+        List<Verhuur> verhuursVanLid { get; set; }
 
         private string connectionString;
         /* = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\Matthias\\OneDrive - Erasmushogeschool Brussel\\Documenten\\EHB\\2021-2022\\.net advanced\\oefeningen" +
@@ -21,9 +23,11 @@ namespace VideotheekApp
 
         public Repository()
         {
+            verhuursVanLid = new List<Verhuur>();
             DeRepository = null;
             Films = new List<Film>();
             Leden = new List<Lid>();
+            VerhuurLijnenVanLid = new List<VerhuurLijn>();
 
             var appDataPath = (string)AppDomain.CurrentDomain.GetData("DataDirectory");
             connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + appDataPath +
@@ -371,7 +375,9 @@ namespace VideotheekApp
                 Id = v.Id,
                 VerhuurId = v.VerhuurId,
                 FilmId = v.FilmId,
-                Prijs = v.Prijs
+                Prijs = v.Prijs,
+                UitleenDatum = v.UitleenDatum,
+                TerugDatum = v.TerugDatum
             };
             linqcontext.VerhuurLijns.InsertOnSubmit(newVerhuurLijn);
             linqcontext.SubmitChanges();
@@ -393,6 +399,135 @@ namespace VideotheekApp
             connection.Close();
 
             return nieuwVerhuurId;
+        }
+
+        public void HaalVerhuurAfMetLidId(Lid l)
+        {
+            if (verhuursVanLid.Count != 0)
+            {
+                verhuursVanLid.Clear();
+            }
+
+            DataClasses1DataContext linqcontext = new DataClasses1DataContext();
+            var verhuurs = (from c in linqcontext.Verhuurs select c).ToList();
+
+            
+
+            foreach (Verhuur v in verhuurs)
+            {
+                if(v.LidId == l.Id)
+                {
+
+                    verhuursVanLid.Add(v);
+                }
+            }
+
+            HaalAlleVerhuurLijnenVanEenLid();
+        }
+
+        public void HaalAlleVerhuurLijnenVanEenLid()
+        {
+            if(VerhuurLijnenVanLid.Count != 0)
+            {
+                VerhuurLijnenVanLid.Clear();
+            }
+
+            DataClasses1DataContext linqcontext = new DataClasses1DataContext();
+            var verhuurLijnen = (from c in linqcontext.VerhuurLijns select c).ToList();
+
+            foreach (VerhuurLijn l in verhuurLijnen)
+            {
+                bool gevonden = false;
+                foreach (Verhuur v in verhuursVanLid)
+                {
+                    if(l.VerhuurId == v.VerhuurId)
+                    {
+                        gevonden = true;
+                        break;
+                    }
+                }
+                if (gevonden == true)
+                {
+                    VerhuurLijn newLijn = new VerhuurLijn();
+
+                    newLijn = l;
+                    VerhuurLijnenVanLid.Add(l);
+                }
+            }
+        }
+
+        public Film HaalFilmVanVerhuurLijn(VerhuurLijn l)
+        {
+            Film film = null;
+            SqlConnection connection = new SqlConnection(connectionString);
+            SqlCommand filmCommand = new SqlCommand("SELECT * FROM Films WHERE Id=" + l.FilmId, connection);
+            connection.Open();
+
+            SqlDataReader reader = filmCommand.ExecuteReader();
+
+            int idIndex = reader.GetOrdinal("Id");
+            int titleIndex = reader.GetOrdinal("Title");
+            int regiseurIndex = reader.GetOrdinal("Regiseur");
+            int acteurIndex = reader.GetOrdinal("Acteurs");
+            int genreIndex = reader.GetOrdinal("Genre");
+            int prijsIndex = reader.GetOrdinal("Prijs");
+            int reviewIndex = reader.GetOrdinal("Review");
+            int ARIndex = reader.GetOrdinal("AdultRating");
+            int posterIndex = reader.GetOrdinal("Poster");
+            int ratedIndex = reader.GetOrdinal("Rated");
+            int runtimeIndex = reader.GetOrdinal("Runtime");
+            int plotIndex = reader.GetOrdinal("Plot");
+
+            while (reader.Read())
+            {
+                Film f = new Film();
+                f.Id = reader.GetInt32(idIndex);
+                f.Title = reader.GetString(titleIndex);
+                f.Regiseur = reader.GetString(regiseurIndex);
+                f.Acteurs = reader.GetString(acteurIndex);
+                f.Genre = reader.GetString(genreIndex);
+                f.Prijs = (float)reader.GetDouble(prijsIndex);
+                f.Review = reader.GetString(reviewIndex);
+                f.AdultRating = reader.GetBoolean(ARIndex);
+                if (!reader.IsDBNull(posterIndex))
+                {
+                    f.Poster = reader.GetString(posterIndex);
+                }
+                if (!reader.IsDBNull(ratedIndex))
+                {
+                    f.Rated = reader.GetString(ratedIndex);
+                }
+                if (!reader.IsDBNull(runtimeIndex))
+                {
+                    f.Runtime = reader.GetString(runtimeIndex);
+                }
+                if (!reader.IsDBNull(plotIndex))
+                {
+                    f.Plot = reader.GetString(plotIndex);
+                }
+
+                film = f;
+            }
+
+            reader.Close();
+
+            connection.Close();
+
+            return film;
+        }
+
+        public void SlaLijnOpInDatabase(VerhuurLijn l)
+        {
+            DataClasses1DataContext linqcontext = new DataClasses1DataContext();
+            VerhuurLijn objLijn = linqcontext.VerhuurLijns.Single(VerhuurLijn => VerhuurLijn.Id == l.Id);
+
+            objLijn.VerhuurId = l.VerhuurId;
+            objLijn.FilmId = l.FilmId;
+            objLijn.Prijs = l.Prijs;
+            objLijn.UitleenDatum = l.UitleenDatum;
+            objLijn.TerugDatum = l.TerugDatum;
+
+            linqcontext.SubmitChanges();
         }
     }
 }

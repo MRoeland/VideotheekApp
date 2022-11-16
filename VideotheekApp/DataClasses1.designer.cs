@@ -523,6 +523,10 @@ namespace VideotheekApp
 		
 		private decimal _Prijs;
 		
+		private System.DateTime _UitleenDatum;
+		
+		private System.Nullable<System.DateTime> _TerugDatum;
+		
 		private EntityRef<Verhuur> _Verhuur;
 		
     #region Extensibility Method Definitions
@@ -537,6 +541,10 @@ namespace VideotheekApp
     partial void OnFilmIdChanged();
     partial void OnPrijsChanging(decimal value);
     partial void OnPrijsChanged();
+    partial void OnUitleenDatumChanging(System.DateTime value);
+    partial void OnUitleenDatumChanged();
+    partial void OnTerugDatumChanging(System.Nullable<System.DateTime> value);
+    partial void OnTerugDatumChanged();
     #endregion
 		
 		public VerhuurLijn()
@@ -625,6 +633,46 @@ namespace VideotheekApp
 					this._Prijs = value;
 					this.SendPropertyChanged("Prijs");
 					this.OnPrijsChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UitleenDatum", DbType="DateTime NOT NULL")]
+		public System.DateTime UitleenDatum
+		{
+			get
+			{
+				return this._UitleenDatum;
+			}
+			set
+			{
+				if ((this._UitleenDatum != value))
+				{
+					this.OnUitleenDatumChanging(value);
+					this.SendPropertyChanging();
+					this._UitleenDatum = value;
+					this.SendPropertyChanged("UitleenDatum");
+					this.OnUitleenDatumChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TerugDatum", DbType="DateTime")]
+		public System.Nullable<System.DateTime> TerugDatum
+		{
+			get
+			{
+				return this._TerugDatum;
+			}
+			set
+			{
+				if ((this._TerugDatum != value))
+				{
+					this.OnTerugDatumChanging(value);
+					this.SendPropertyChanging();
+					this._TerugDatum = value;
+					this.SendPropertyChanged("TerugDatum");
+					this.OnTerugDatumChanged();
 				}
 			}
 		}

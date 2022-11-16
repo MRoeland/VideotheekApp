@@ -43,11 +43,11 @@
             this.btnChooseMovies = new System.Windows.Forms.Button();
             this.lvFilmList = new System.Windows.Forms.ListView();
             this.gbTotalPrice = new System.Windows.Forms.GroupBox();
+            this.lblDate = new System.Windows.Forms.Label();
+            this.tbDatum = new System.Windows.Forms.TextBox();
             this.btnBetalen = new System.Windows.Forms.Button();
             this.tbPrice = new System.Windows.Forms.TextBox();
             this.lblPrice = new System.Windows.Forms.Label();
-            this.tbDatum = new System.Windows.Forms.TextBox();
-            this.lblDate = new System.Windows.Forms.Label();
             this.gbKassaHeader.SuspendLayout();
             this.gpFIlmLines.SuspendLayout();
             this.gbTotalPrice.SuspendLayout();
@@ -213,6 +213,22 @@
             this.gbTotalPrice.TabStop = false;
             this.gbTotalPrice.Text = "Prijs";
             // 
+            // lblDate
+            // 
+            this.lblDate.AutoSize = true;
+            this.lblDate.Location = new System.Drawing.Point(6, 71);
+            this.lblDate.Name = "lblDate";
+            this.lblDate.Size = new System.Drawing.Size(115, 15);
+            this.lblDate.TabIndex = 4;
+            this.lblDate.Text = "Datum van uitlening";
+            // 
+            // tbDatum
+            // 
+            this.tbDatum.Location = new System.Drawing.Point(127, 68);
+            this.tbDatum.Name = "tbDatum";
+            this.tbDatum.Size = new System.Drawing.Size(93, 23);
+            this.tbDatum.TabIndex = 3;
+            // 
             // btnBetalen
             // 
             this.btnBetalen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -241,27 +257,11 @@
             this.lblPrice.TabIndex = 0;
             this.lblPrice.Text = "Totale eindprijs";
             // 
-            // tbDatum
-            // 
-            this.tbDatum.Location = new System.Drawing.Point(127, 68);
-            this.tbDatum.Name = "tbDatum";
-            this.tbDatum.Size = new System.Drawing.Size(93, 23);
-            this.tbDatum.TabIndex = 3;
-            // 
-            // lblDate
-            // 
-            this.lblDate.AutoSize = true;
-            this.lblDate.Location = new System.Drawing.Point(6, 71);
-            this.lblDate.Name = "lblDate";
-            this.lblDate.Size = new System.Drawing.Size(115, 15);
-            this.lblDate.TabIndex = 4;
-            this.lblDate.Text = "Datum van uitlening";
-            // 
             // KassaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.LightBlue;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(223)))));
             this.ClientSize = new System.Drawing.Size(622, 655);
             this.Controls.Add(this.gbTotalPrice);
             this.Controls.Add(this.gpFIlmLines);
